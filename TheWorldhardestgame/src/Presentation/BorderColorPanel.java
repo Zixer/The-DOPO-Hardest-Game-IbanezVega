@@ -8,9 +8,8 @@ import java.awt.event.ActionListener;
 public class BorderColorPanel extends JPanel {
 
     private TheWorldsHardestGameGUI gui;
-
     private JLabel title;
-    private JButton yellowButton;
+    private JButton redButton; // Cambiado de yellow a red para coincidir con la lÃ³gica
     private JButton orangeButton;
     private JButton cyanButton;
     private JButton pinkButton;
@@ -28,14 +27,16 @@ public class BorderColorPanel extends JPanel {
         setBackground(new Color(0, 102, 255));
 
         title = new JLabel("CHOOSE BORDER COLOR");
-        title.setFont(new Font("Arial", Font.BOLD, 34));
+        title.setFont(new Font("Arial", Font.BOLD, 30));
         title.setForeground(Color.WHITE);
-        title.setBounds(230, 80, 500, 50);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setBounds(100, 80, 700, 50);
         add(title);
 
-        yellowButton = new JButton("YELLOW");
-        yellowButton.setBounds(330, 360, 220, 40);
-        add(yellowButton);
+        // Ajuste de posiciones Y para que no se solapen
+        redButton = new JButton("RED");
+        redButton.setBounds(330, 180, 220, 40);
+        add(redButton);
 
         orangeButton = new JButton("ORANGE");
         orangeButton.setBounds(330, 240, 220, 40);
@@ -63,47 +64,11 @@ public class BorderColorPanel extends JPanel {
     }
 
     private void prepareActions() {
-
-    	yellowButton.addActionListener(new ActionListener() {
-    	    @Override
-    	    public void actionPerformed(ActionEvent e) {
-    	        gui.setBorderColor(Color.RED);
-    	    }
-    	});
-
-        orangeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	gui.setBorderColor(Color.ORANGE);
-            }
-        });
-
-        cyanButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	gui.setBorderColor(Color.CYAN);
-            }
-        });
-
-        pinkButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	gui.setBorderColor(Color.PINK);;
-            }
-        });
-
-        magentaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	gui.setBorderColor(Color.MAGENTA);
-            }
-        });
-
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gui.showScreen("mode");
-            }
-        });
+        redButton.addActionListener(e -> gui.setBorderColor(Color.RED));
+        orangeButton.addActionListener(e -> gui.setBorderColor(Color.ORANGE));
+        cyanButton.addActionListener(e -> gui.setBorderColor(Color.CYAN));
+        pinkButton.addActionListener(e -> gui.setBorderColor(Color.PINK));
+        magentaButton.addActionListener(e -> gui.setBorderColor(Color.MAGENTA));
+        backButton.addActionListener(e -> gui.showScreen("mode"));
     }
 }

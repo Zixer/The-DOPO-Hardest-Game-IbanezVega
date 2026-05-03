@@ -57,14 +57,14 @@ public class ModePanel extends JPanel {
     	normalButton.addActionListener(new ActionListener() {
     	    @Override
     	    public void actionPerformed(ActionEvent e) {
-    	        gui.showScreen("game");
+    	        gui.showScreen("levelSelector");
     	    }
     	});
 
         pvsmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-    	        gui.showScreen("game");
+    	        gui.showScreen("levelSelector");
     	    }
         });
 
