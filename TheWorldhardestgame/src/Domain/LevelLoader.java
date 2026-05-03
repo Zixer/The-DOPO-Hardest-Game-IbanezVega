@@ -26,25 +26,56 @@ public class LevelLoader {
     private static Level createLevelOne() {
         Level level = new Level(60);
 
-        Player player = new Player(70, 260, new Blinky());
+        // Jugador
+        Player player = new Player(80, 290, new Blinky());
         level.addPlayer(player);
 
-        level.addGameObject(new InitialZone(40, 230, 100, 100));
-        level.addGameObject(new FinalZone(720, 230, 100, 100));
+        // Zonas seguras
+        level.addGameObject(new InitialZone(40, 250, 120, 120));
+        level.addGameObject(new FinalZone(720, 250, 120, 120));
 
-        level.addGameObject(new Wall(250, 120, 40, 360));
-        level.addGameObject(new Wall(530, 120, 40, 360));
+        // Bordes externos para encerrar el mapa
+        level.addGameObject(new Wall(0, 35, 900, 25));      // arriba
+        level.addGameObject(new Wall(0, 600, 900, 25));     // abajo
+        level.addGameObject(new Wall(0, 35, 25, 590));      // izquierda
+        level.addGameObject(new Wall(875, 35, 25, 590));    // derecha
 
-        level.addGameObject(new Coin(390, 260));
-        level.addGameObject(new Coin(430, 260));
+        // Paredes internas estilo nivel 1
+        level.addGameObject(new Wall(160, 35, 25, 215));
+        level.addGameObject(new Wall(160, 370, 25, 255));
 
-        Enemy enemy1 = new Enemy(360, 180, 3);
+        level.addGameObject(new Wall(715, 35, 25, 215));
+        level.addGameObject(new Wall(715, 370, 25, 255));
+
+        // Pasillo central
+        level.addGameObject(new Wall(185, 250, 530, 25));
+        level.addGameObject(new Wall(185, 345, 530, 25));
+
+        // Monedas en el centro
+        level.addGameObject(new Coin(390, 292));
+        level.addGameObject(new Coin(430, 292));
+        level.addGameObject(new Coin(470, 292));
+
+        // Enemigos azules moviéndose verticalmente en el corredor
+        Enemy enemy1 = new Enemy(260, 285, 3);
         enemy1.setVelocityY(3);
         level.addGameObject(enemy1);
 
-        Enemy enemy2 = new Enemy(460, 360, 3);
+        Enemy enemy2 = new Enemy(340, 330, 3);
         enemy2.setVelocityY(-3);
         level.addGameObject(enemy2);
+
+        Enemy enemy3 = new Enemy(420, 285, 3);
+        enemy3.setVelocityY(3);
+        level.addGameObject(enemy3);
+
+        Enemy enemy4 = new Enemy(500, 330, 3);
+        enemy4.setVelocityY(-3);
+        level.addGameObject(enemy4);
+
+        Enemy enemy5 = new Enemy(580, 285, 3);
+        enemy5.setVelocityY(3);
+        level.addGameObject(enemy5);
 
         return level;
     }

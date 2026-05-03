@@ -11,4 +11,10 @@ public interface Skin {
     default void applyEffect(Player p) {
         // vacío por defecto
     }
+    
+    int getSpeed();
+
+    int getSize();
+
+    boolean canResistHit();
 }

@@ -9,6 +9,11 @@ public class GamePanel extends JPanel {
     private TheWorldsHardestGameGUI gui;
     private Timer timer;
 
+    private boolean upPressed;
+    private boolean downPressed;
+    private boolean leftPressed;
+    private boolean rightPressed;
+
     public GamePanel(TheWorldsHardestGameGUI gui) {
         this.gui = gui;
         prepareElements();
@@ -25,63 +30,78 @@ public class GamePanel extends JPanel {
         InputMap inputMap = getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();
 
-        inputMap.put(KeyStroke.getKeyStroke("UP"), "moveUp");
-        inputMap.put(KeyStroke.getKeyStroke("DOWN"), "moveDown");
-        inputMap.put(KeyStroke.getKeyStroke("LEFT"), "moveLeft");
-        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "moveRight");
+        inputMap.put(KeyStroke.getKeyStroke("UP"), "pressUp");
+        inputMap.put(KeyStroke.getKeyStroke("DOWN"), "pressDown");
+        inputMap.put(KeyStroke.getKeyStroke("LEFT"), "pressLeft");
+        inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "pressRight");
 
-        inputMap.put(KeyStroke.getKeyStroke("released UP"), "stopVertical");
-        inputMap.put(KeyStroke.getKeyStroke("released DOWN"), "stopVertical");
-        inputMap.put(KeyStroke.getKeyStroke("released LEFT"), "stopHorizontal");
-        inputMap.put(KeyStroke.getKeyStroke("released RIGHT"), "stopHorizontal");
+        inputMap.put(KeyStroke.getKeyStroke("released UP"), "releaseUp");
+        inputMap.put(KeyStroke.getKeyStroke("released DOWN"), "releaseDown");
+        inputMap.put(KeyStroke.getKeyStroke("released LEFT"), "releaseLeft");
+        inputMap.put(KeyStroke.getKeyStroke("released RIGHT"), "releaseRight");
 
         inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), "backToMenu");
 
-        actionMap.put("moveUp", new AbstractAction() {
+        actionMap.put("pressUp", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.movePlayerUp();
+                upPressed = true;
             }
         });
 
-        actionMap.put("moveDown", new AbstractAction() {
+        actionMap.put("pressDown", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.movePlayerDown();
+                downPressed = true;
             }
         });
 
-        actionMap.put("moveLeft", new AbstractAction() {
+        actionMap.put("pressLeft", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.movePlayerLeft();
+                leftPressed = true;
             }
         });
 
-        actionMap.put("moveRight", new AbstractAction() {
+        actionMap.put("pressRight", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.movePlayerRight();
+                rightPressed = true;
             }
         });
 
-        actionMap.put("stopVertical", new AbstractAction() {
+        actionMap.put("releaseUp", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.stopPlayerVerticalMovement();
+                upPressed = false;
             }
         });
 
-        actionMap.put("stopHorizontal", new AbstractAction() {
+        actionMap.put("releaseDown", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.stopPlayerHorizontalMovement();
+                downPressed = false;
+            }
+        });
+
+        actionMap.put("releaseLeft", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                leftPressed = false;
+            }
+        });
+
+        actionMap.put("releaseRight", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rightPressed = false;
             }
         });
 
         actionMap.put("backToMenu", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                stopGame();
                 gui.showScreen("menu");
             }
         });
@@ -90,25 +110,49 @@ public class GamePanel extends JPanel {
     public void startGame() {
         requestFocusInWindow();
 
+        upPressed = false;
+        downPressed = false;
+        leftPressed = false;
+        rightPressed = false;
+
         if (timer != null && timer.isRunning()) {
             timer.stop();
         }
 
-        timer = new Timer(16, e -> {
-            gui.updateGame();
+        timer = new Timer(16, new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gui.updatePlayerMovement(upPressed, downPressed, leftPressed, rightPressed);
+                gui.updateGame();
 
-            if (gui.isTimeUp()) {
-                timer.stop();
-                gui.handleTimeUp();
-                return;
+                if (gui.isTimeUp()) {
+                    timer.stop();
+                    gui.handleTimeUp();
+                    return;
+                }
+
+                repaint();
             }
-
-            repaint();
         });
 
         timer.start();
     }
-    
+
+    public void stopGame() {
+        if (timer != null && timer.isRunning()) {
+            timer.stop();
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+        gui.renderGame(g2d);
+        drawHUD(g2d);
+    }
+
     private void drawHUD(Graphics2D g2d) {
         g2d.setColor(Color.BLACK);
         g2d.fillRect(0, 0, getWidth(), 35);
@@ -119,14 +163,5 @@ public class GamePanel extends JPanel {
         g2d.drawString("TIME: " + gui.getTimeRemaining(), 20, 23);
         g2d.drawString("DEATHS: " + gui.getDeaths(), 160, 23);
         g2d.drawString("COINS: " + gui.getCoinsCollected(), 320, 23);
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        Graphics2D g2d = (Graphics2D) g;
-        gui.renderGame(g2d);
-        drawHUD(g2d);
     }
 }

@@ -2,30 +2,30 @@ package Domain;
 
 import java.awt.Color;
 
-public class InkySkin implements Skin {
+public class ClydeSkin implements Skin {
 
     @Override
     public Color getColor() {
-        return Color.BLUE;
+        return Color.GREEN;
     }
 
     @Override
     public String getName() {
-        return "Inky";
+        return "Clyde";
     }
 
     @Override
     public int getSpeed() {
-        return 8; // más rápido
+        return 5; // normal al inicio
     }
 
     @Override
     public int getSize() {
-        return 30; // más grande
+        return 20; // tamaño normal
     }
 
     @Override
     public boolean canResistHit() {
-        return false;
+        return true; // 🔥 clave
     }
 }

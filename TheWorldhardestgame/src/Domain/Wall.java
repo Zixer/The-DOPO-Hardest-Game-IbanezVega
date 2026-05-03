@@ -24,11 +24,9 @@ public class Wall extends StaticObject {
     public boolean blocksMovement() {
         return true;
     }
-
+    
     @Override
     public void handleCollision(Player p, Level l) {
-        // Devuelve al jugador a su posición anterior
-        p.setPosX(p.getPosX() - p.getVelocityX());
-        p.setPosY(p.getPosY() - p.getVelocityY());
+        p.returnToPreviousPosition();
     }
 }

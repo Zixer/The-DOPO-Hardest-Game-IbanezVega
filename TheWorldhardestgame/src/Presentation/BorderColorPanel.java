@@ -9,7 +9,7 @@ public class BorderColorPanel extends JPanel {
 
     private TheWorldsHardestGameGUI gui;
     private JLabel title;
-    private JButton redButton; // Cambiado de yellow a red para coincidir con la lÃ³gica
+    private JButton blackButton; 
     private JButton orangeButton;
     private JButton cyanButton;
     private JButton pinkButton;
@@ -34,9 +34,9 @@ public class BorderColorPanel extends JPanel {
         add(title);
 
         // Ajuste de posiciones Y para que no se solapen
-        redButton = new JButton("RED");
-        redButton.setBounds(330, 180, 220, 40);
-        add(redButton);
+        blackButton = new JButton("BLACK");
+        blackButton.setBounds(330, 180, 220, 40);
+        add(blackButton);
 
         orangeButton = new JButton("ORANGE");
         orangeButton.setBounds(330, 240, 220, 40);
@@ -64,7 +64,7 @@ public class BorderColorPanel extends JPanel {
     }
 
     private void prepareActions() {
-        redButton.addActionListener(e -> gui.setBorderColor(Color.RED));
+    	blackButton.addActionListener(e -> gui.setBorderColor(Color.BLACK));
         orangeButton.addActionListener(e -> gui.setBorderColor(Color.ORANGE));
         cyanButton.addActionListener(e -> gui.setBorderColor(Color.CYAN));
         pinkButton.addActionListener(e -> gui.setBorderColor(Color.PINK));

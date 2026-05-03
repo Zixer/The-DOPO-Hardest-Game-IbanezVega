@@ -41,8 +41,25 @@ public class Level {
         checkObjectCollisions();
 
         for (Player player : players) {
-            player.update();
-            checkCollisions(player);
+        	player.update();
+        	checkCollisions(player);
+        	resolveWallCollision(player);
+        }
+    }
+    
+    private void resolveWallCollision(Player p) {
+
+        for (GameObject obj : gameObjects) {
+
+            if (obj.blocksMovement() && isColliding(p, obj)) {
+
+                p.setPosX(p.getPosX() - p.getVelocityX());
+
+                if (isColliding(p, obj)) {
+                   
+                    p.setPosY(p.getPosY() - p.getVelocityY());
+                }
+            }
         }
     }
     

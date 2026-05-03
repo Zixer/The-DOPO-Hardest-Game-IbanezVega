@@ -22,6 +22,14 @@ public abstract class DynamicObject extends GameObject {
         posX += velocityX;
         posY += velocityY;
     }
+    
+    protected void moveX() {
+        posX += velocityX;
+    }
+
+    protected void moveY() {
+        posY += velocityY;
+    }
 
     public void moveUp() {
         velocityY = -speed;

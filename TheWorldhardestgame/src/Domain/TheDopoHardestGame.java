@@ -9,8 +9,8 @@ public class TheDopoHardestGame {
 
     private Color player1Border;
     private Color player2Border;
-    private Color player1Fill;
-    private Color player2Fill;
+    private String player1Skin = "BLINKY";
+    private String player2Skin = "BLINKY";
 
     public TheDopoHardestGame() {
         currentLevel = null;
@@ -21,22 +21,22 @@ public class TheDopoHardestGame {
 
         if (currentLevel != null) {
 
-            // 🔥 Aplicar colores al cargar nivel
-            if (currentLevel.getPlayer(0) != null) {
+            Player player1 = currentLevel.getPlayer(0);
+            Player player2 = currentLevel.getPlayer(1);
+
+            if (player1 != null) {
+                player1.applySkinEffect(createSkin(player1Skin));
+
                 if (player1Border != null) {
-                    currentLevel.getPlayer(0).setBorderColor(player1Border);
-                }
-                if (player1Fill != null) {
-                    currentLevel.getPlayer(0).setFillColor(player1Fill);
+                    player1.setBorderColor(player1Border);
                 }
             }
 
-            if (currentLevel.getPlayer(1) != null) {
+            if (player2 != null) {
+                player2.applySkinEffect(createSkin(player2Skin));
+
                 if (player2Border != null) {
-                    currentLevel.getPlayer(1).setBorderColor(player2Border);
-                }
-                if (player2Fill != null) {
-                    currentLevel.getPlayer(1).setFillColor(player2Fill);
+                    player2.setBorderColor(player2Border);
                 }
             }
         }
@@ -46,6 +46,32 @@ public class TheDopoHardestGame {
         if (currentLevel != null) {
             currentLevel.update();
         }
+    }
+    
+    public void setPlayerSkin(int playerNumber, String skinName) {
+        if (playerNumber == 1) {
+            player1Skin = skinName;
+        } else if (playerNumber == 2) {
+            player2Skin = skinName;
+        }
+
+        Player player = getPlayer(playerNumber);
+
+        if (player != null) {
+            player.applySkinEffect(createSkin(skinName));
+        }
+    }
+    
+    private Skin createSkin(String skinName) {
+        if (skinName.equalsIgnoreCase("INKY")) {
+            return new InkySkin();
+        }
+
+        if (skinName.equalsIgnoreCase("CLYDE")) {
+            return new ClydeSkin();
+        }
+
+        return new Blinky();
     }
 
     public void render(Graphics2D g2d) {
@@ -71,22 +97,12 @@ public class TheDopoHardestGame {
             }
         }
     }
+    
+    public void updatePlayerMovement(int playerNumber, boolean up, boolean down, boolean left, boolean right) {
+        Player player = getPlayer(playerNumber);
 
-    public void setPlayerFillColor(int playerNumber, Color color) {
-
-        if (playerNumber == 1) {
-            player1Fill = color;
-
-            if (currentLevel != null && currentLevel.getPlayer(0) != null) {
-                currentLevel.getPlayer(0).setFillColor(color);
-            }
-
-        } else if (playerNumber == 2) {
-            player2Fill = color;
-
-            if (currentLevel != null && currentLevel.getPlayer(1) != null) {
-                currentLevel.getPlayer(1).setFillColor(color);
-            }
+        if (player != null) {
+            player.updateMovement(up, down, left, right);
         }
     }
     
@@ -131,6 +147,14 @@ public class TheDopoHardestGame {
             player.stopHorizontalMovement();
         }
     }
+    
+    public void resetPlayerConfiguration() {
+        player1Skin = "BLINKY";
+        player2Skin = "BLINKY";
+
+        player1Border = Color.BLACK;
+        player2Border = Color.BLACK;
+    }
 
     private Player getPlayer(int playerNumber) {
         if (currentLevel == null) {
@@ -171,10 +195,6 @@ public class TheDopoHardestGame {
 
     public Color getPlayerBorderColor(int playerNumber) {
         return (playerNumber == 1) ? player1Border : player2Border;
-    }
-
-    public Color getPlayerFillColor(int playerNumber) {
-        return (playerNumber == 1) ? player1Fill : player2Fill;
     }
 
     public Level getCurrentLevel() {

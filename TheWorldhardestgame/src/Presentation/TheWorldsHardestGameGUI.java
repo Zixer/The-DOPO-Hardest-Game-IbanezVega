@@ -66,6 +66,7 @@ public class TheWorldsHardestGameGUI extends JFrame {
     }
 
     public void startPvSPColorSelection() {
+        game.resetPlayerConfiguration();
         currentPlayer = 1;
         showScreen("borderColor");
     }
@@ -82,13 +83,13 @@ public class TheWorldsHardestGameGUI extends JFrame {
         }
     }
 
-    public void setPlayerFillColor(Color color) {
+    public void setPlayerSkin(String skinName) {
         if (currentPlayer == 1) {
-            game.setPlayerFillColor(1, color);
+            game.setPlayerSkin(1, skinName);
             currentPlayer = 2;
             showScreen("colorSelection");
         } else {
-            game.setPlayerFillColor(2, color);
+            game.setPlayerSkin(2, skinName);
             currentPlayer = 1;
             showScreen("levelSelector");
         }
@@ -124,6 +125,10 @@ public class TheWorldsHardestGameGUI extends JFrame {
         if (option == 0) {
             selectLevel(selectedLevel);
         }
+    }
+    
+    public void updatePlayerMovement(boolean up, boolean down, boolean left, boolean right) {
+        game.updatePlayerMovement(1, up, down, left, right);
     }
     
     public int getCoinsCollected() {

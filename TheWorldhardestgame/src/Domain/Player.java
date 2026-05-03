@@ -12,6 +12,8 @@ public class Player extends DynamicObject {
 
     private int spawnX;
     private int spawnY;
+    private int previousX;
+    private int previousY;
 
     private Color borderColor;
     private Color fillColor;
@@ -36,7 +38,14 @@ public class Player extends DynamicObject {
 
     @Override
     public void update() {
+        previousX = posX;
+        previousY = posY;
         super.move();
+    }
+    
+    public void returnToPreviousPosition() {
+        posX = previousX;
+        posY = previousY;
     }
 
     @Override
@@ -55,6 +64,14 @@ public class Player extends DynamicObject {
     }
 
     public void die() {
+    	
+    	if (currentSkin != null && currentSkin.canResistHit()) {
+            speed = (int)(speed * 0.7);
+            currentSkin = new Blinky();
+            fillColor = currentSkin.getColor();
+            return;
+        }
+    	
         if (shield) {
             shield = false;
             return;
@@ -62,6 +79,27 @@ public class Player extends DynamicObject {
 
         deaths++;
         respawn();
+    }
+    
+    public void updateMovement(boolean up, boolean down, boolean left, boolean right) {
+        velocityX = 0;
+        velocityY = 0;
+
+        if (up) {
+            velocityY -= speed;
+        }
+
+        if (down) {
+            velocityY += speed;
+        }
+
+        if (left) {
+            velocityX -= speed;
+        }
+
+        if (right) {
+            velocityX += speed;
+        }
     }
     
     public void activateShield() {
@@ -80,11 +118,22 @@ public class Player extends DynamicObject {
     }
 
     public void applySkinEffect(Skin newSkin) {
-        currentSkin = newSkin;
-
-        if (newSkin != null) {
-            fillColor = newSkin.getColor();
+        if (newSkin == null) {
+            return;
         }
+
+        int centerX = posX + width / 2;
+        int centerY = posY + height / 2;
+
+        currentSkin = newSkin;
+        fillColor = newSkin.getColor();
+        speed = newSkin.getSpeed();
+
+        width = newSkin.getSize();
+        height = newSkin.getSize();
+
+        posX = centerX - width / 2;
+        posY = centerY - height / 2;
     }
 
     public void setSpawnPosition(int x, int y) {
