@@ -9,6 +9,7 @@ public class Enemy extends DynamicObject {
         super(x, y, 15, 15, speed);
     }
 
+    
     @Override
     public void update() {
         super.move();
@@ -22,14 +23,11 @@ public class Enemy extends DynamicObject {
 
     @Override
     public void render(Graphics2D g2d) {
+        g2d.setColor(Color.BLACK);
+        g2d.fillOval(posX - 4, posY - 4, width + 8, height + 8);
 
-        // Enemigo clásico: bolita azul
         g2d.setColor(Color.BLUE);
         g2d.fillOval(posX, posY, width, height);
-
-        // Borde para que resalte
-        g2d.setColor(Color.BLACK);
-        g2d.drawOval(posX, posY, width, height);
     }
 
     // ====================================================================

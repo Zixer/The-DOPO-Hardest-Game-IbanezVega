@@ -105,25 +105,61 @@ public class LevelLoader {
     }
 
     private static Level createLevelThree() {
-        Level level = new Level(80);
+        Level level = new Level(60);
 
-        Player player = new Player(70, 500, new Blinky());
+        // Jugador
+        Player player = new Player(200, 315, new Blinky());
         level.addPlayer(player);
 
-        level.addGameObject(new InitialZone(40, 460, 100, 100));
-        level.addGameObject(new FinalZone(720, 40, 100, 100));
+        // Fondo jugable tipo original
+        level.addGameObject(new PlayZone(125, 215, 130, 250)); // zona verde inicial encima
+        level.addGameObject(new PlayZone(255, 255, 85, 210));  // cuello izquierdo
+        level.addGameObject(new PlayZone(340, 255, 330, 170)); // corredor central
+        level.addGameObject(new PlayZone(670, 215, 45, 210));  // cuello derecho
+        level.addGameObject(new PlayZone(715, 215, 160, 250)); // zona verde final encima
 
-        level.addGameObject(new Coin(250, 400));
-        level.addGameObject(new Coin(400, 280));
-        level.addGameObject(new Coin(550, 160));
+        // Zonas seguras verdes
+        level.addGameObject(new InitialZone(130, 220, 125, 245));
+        level.addGameObject(new FinalZone(750, 220, 125, 245));
 
-        Enemy enemy1 = new Enemy(300, 200, 5);
-        enemy1.setVelocityX(5);
+        // Paredes invisibles para colisión externa
+        level.addGameObject(new Wall(125, 215, 5, 250));
+        level.addGameObject(new Wall(125, 215, 130, 5));
+        level.addGameObject(new Wall(125, 465, 215, 5));
+
+        level.addGameObject(new Wall(255, 215, 5, 205));
+
+        level.addGameObject(new Wall(400, 255, 330, 5));
+        level.addGameObject(new Wall(340, 420, 330, 5));
+
+        level.addGameObject(new Wall(670, 255, 5, 40));
+        level.addGameObject(new Wall(670, 255, 45, 5));
+        level.addGameObject(new Wall(715, 255, 5, 170));
+
+        level.addGameObject(new Wall(750, 215, 125, 5));
+        level.addGameObject(new Wall(875, 215, 5, 250));
+        level.addGameObject(new Wall(750, 465, 130, 5));
+        level.addGameObject(new Wall(750, 260, 5, 205));
+
+        // Moneda central
+        level.addGameObject(new Coin(485, 335));
+
+        // Enemigos
+        Enemy enemy1 = new Enemy(430, 275, 3);
+        enemy1.setVelocityY(3);
         level.addGameObject(enemy1);
 
-        Enemy enemy2 = new Enemy(500, 350, 5);
-        enemy2.setVelocityY(-5);
+        Enemy enemy2 = new Enemy(560, 315, 3);
+        enemy2.setVelocityY(3);
         level.addGameObject(enemy2);
+
+        Enemy enemy3 = new Enemy(430, 365, 3);
+        enemy3.setVelocityY(-3);
+        level.addGameObject(enemy3);
+
+        Enemy enemy4 = new Enemy(560, 400, 3);
+        enemy4.setVelocityY(-3);
+        level.addGameObject(enemy4);
 
         return level;
     }

@@ -52,6 +52,14 @@ public class Player extends DynamicObject {
     public void handleCollision(Player p, Level l) {
         // El jugador no necesita reaccionar al chocar consigo mismo.
     }
+    
+    public int getPreviousX() {
+        return previousX;
+    }
+
+    public int getPreviousY() {
+        return previousY;
+    }
 
     @Override
     public void render(Graphics2D g2d) {
