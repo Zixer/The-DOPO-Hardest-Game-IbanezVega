@@ -112,31 +112,33 @@ public class LevelLoader {
         level.addPlayer(player);
 
         // Fondo jugable tipo original
-        level.addGameObject(new PlayZone(125, 215, 130, 250)); // zona verde inicial encima
-        level.addGameObject(new PlayZone(255, 255, 85, 210));  // cuello izquierdo
-        level.addGameObject(new PlayZone(340, 255, 330, 170)); // corredor central
-        level.addGameObject(new PlayZone(670, 215, 45, 210));  // cuello derecho
-        level.addGameObject(new PlayZone(715, 215, 160, 250)); // zona verde final encima
+        
+        level.addGameObject(new PlayZone(255, 265, 80, 200));  // cuello izquierdo
+        level.addGameObject(new PlayZone(335, 265, 335, 155)); // corredor central
+        level.addGameObject(new PlayZone(670, 220, 85, 200));  // cuello derecho
+        
 
         // Zonas seguras verdes
         level.addGameObject(new InitialZone(130, 220, 125, 245));
         level.addGameObject(new FinalZone(750, 220, 125, 245));
 
         // Paredes invisibles para colisión externa
+        
+        //paredes izquierda
         level.addGameObject(new Wall(125, 215, 5, 250));
         level.addGameObject(new Wall(125, 215, 130, 5));
         level.addGameObject(new Wall(125, 465, 215, 5));
-
         level.addGameObject(new Wall(255, 215, 5, 205));
-
-        level.addGameObject(new Wall(400, 255, 330, 5));
-        level.addGameObject(new Wall(340, 420, 330, 5));
-
-        level.addGameObject(new Wall(670, 255, 5, 40));
-        level.addGameObject(new Wall(670, 255, 45, 5));
-        level.addGameObject(new Wall(715, 255, 5, 170));
-
-        level.addGameObject(new Wall(750, 215, 125, 5));
+        //zona media
+        level.addGameObject(new Wall(335, 415, 5, 50));
+        level.addGameObject(new Wall(335, 415, 420, 5));
+        //parte arriba
+        level.addGameObject(new Wall(335, 415, 335, 5));
+        level.addGameObject(new Wall(255, 265, 415, 5));
+        level.addGameObject(new Wall(665, 215, 5, 50));
+        
+        // derecha
+        level.addGameObject(new Wall(665, 215, 210, 5));
         level.addGameObject(new Wall(875, 215, 5, 250));
         level.addGameObject(new Wall(750, 465, 130, 5));
         level.addGameObject(new Wall(750, 260, 5, 205));
