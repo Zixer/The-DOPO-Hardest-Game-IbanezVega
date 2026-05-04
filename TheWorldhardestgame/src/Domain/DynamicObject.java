@@ -12,12 +12,20 @@ public abstract class DynamicObject extends GameObject {
         this.velocityX = 0;
         this.velocityY = 0;
     }
-
+    
+    /**
+     * Actualiza el estado del objeto en cada ciclo del juego.
+     * 
+     * Por defecto, solo ejecuta el movimiento.
+     */
     @Override
     public void update() {
         move();
     }
 
+    /**
+     * Aplica el movimiento completo del objeto en ambos ejes.
+     */
     protected void move() {
         posX += velocityX;
         posY += velocityY;

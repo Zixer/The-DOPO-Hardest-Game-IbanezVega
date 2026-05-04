@@ -9,6 +9,18 @@ public class CheckpointZone extends Zone {
         this.color = new Color(170, 255, 170); 
     }
 
+    /**
+     * Maneja la colisión entre el jugador y la zona de checkpoint.
+     * 
+     * Cuando el jugador entra en esta zona:
+     * 1. Se calcula el centro de la zona.
+     * 2. Se ajusta la posición para centrar al jugador.
+     * 3. Se guarda esta posición como nuevo punto de respawn.
+     * 4. Se cambia el color de la zona para indicar activación.
+     * 
+     * @param p El jugador que colisiona con la zona
+     * @param l El nivel actual (no se usa directamente aquí, pero se mantiene por consistencia)
+     */
     @Override
     public void handleCollision(Player p, Level l) {
 

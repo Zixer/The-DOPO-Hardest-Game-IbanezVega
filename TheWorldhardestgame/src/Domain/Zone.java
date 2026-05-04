@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 public abstract class Zone extends StaticObject {
 
-    protected Color color; // 🔥 CAMBIO CLAVE
+    protected Color color; 
 
     public Zone(int x, int y, int w, int h) {
         super(x, y, w, h);
@@ -19,7 +19,6 @@ public abstract class Zone extends StaticObject {
         // Las zonas no se mueven
     }
 
-    // 🔥 OPCIONAL: puedes dejar esto abstracto o implementarlo aquí
     @Override
     public void render(Graphics2D g2d) {
         g2d.setColor(color);

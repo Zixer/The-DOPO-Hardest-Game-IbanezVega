@@ -9,6 +9,11 @@ public class Wall extends StaticObject {
         super(x, y, w, h);
     }
 
+    /**
+     * Dibuja la pared en pantalla.
+     * 
+     * @param g2d Objeto gráfico usado para renderizar
+     */
     @Override
     public void render(Graphics2D g2d) {
  
@@ -19,11 +24,26 @@ public class Wall extends StaticObject {
         g2d.drawRect(posX, posY, width, height);
     }
     
+    /**
+     * Indica que la pared bloquea el movimiento.
+     * 
+     * @return true porque la pared impide el paso
+     */
     @Override
     public boolean blocksMovement() {
         return true;
     }
     
+    /**
+     * Maneja la colisión entre el jugador y la pared.
+     * 
+     * Usa la posición anterior del jugador para determinar desde qué lado
+     * chocó contra la pared y lo reposiciona fuera de ella.
+     * También detiene la velocidad correspondiente al eje de colisión.
+     * 
+     * @param p Jugador que colisiona con la pared
+     * @param l Nivel actual
+     */
     @Override
     public void handleCollision(Player p, Level l) {
 

@@ -9,6 +9,17 @@ public class FinalZone extends Zone {
         this.color = new Color(0, 255, 0);
     }
 
+    /**
+     * Maneja la colisión entre el jugador y la zona final.
+     * 
+     * - Si todos los objetos requeridos han sido recolectados:
+     *      → Se marca el nivel como completado.
+     * - Si no:
+     *      → Se muestra un mensaje indicando que faltan objetivos.
+     * 
+     * @param p El jugador que entra en la zona final
+     * @param l El nivel actual
+     */
     @Override
     public void handleCollision(Player p, Level l) {
         if (l.allRequiredObjectsCollected()) {

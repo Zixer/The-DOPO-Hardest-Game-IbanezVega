@@ -12,6 +12,16 @@ public abstract class Collectable extends StaticObject {
         this.collected = false;
     }
 
+    /**
+     * Maneja la colisión con el jugador.
+     * 
+     * Si el objeto no ha sido recolectado:
+     * - Aplica su efecto específico.
+     * - Cambia su estado a recolectado.
+     * 
+     * @param p El jugador que colisiona con el objeto
+     * @param l El nivel actual
+     */
     @Override
     public void handleCollision(Player p, Level l) {
         if (!collected) {
@@ -20,6 +30,14 @@ public abstract class Collectable extends StaticObject {
         }
     }
 
+    /**
+     * Método abstracto que define el efecto del objeto al ser recolectado.
+     * 
+     * Cada subclase (por ejemplo, Coin) debe implementar su propio efecto.
+     * 
+     * @param p El jugador que recoge el objeto
+     * @param l El nivel actual
+     */
     protected abstract void applyEffect(Player p, Level l);
 
     @Override

@@ -9,12 +9,30 @@ public class LifeSource extends Collectable {
         super(x, y, 15, 15);
     }
 
+    /**
+     * Aplica el efecto al ser recolectado por el jugador.
+     * 
+     * - Activa un escudo en el jugador.
+     * - Muestra un mensaje en consola.
+     * 
+     * @param p El jugador que recoge el objeto
+     * @param l El nivel actual
+     */
     @Override
     protected void applyEffect(Player p, Level l) {
         p.activateShield();
         System.out.println("Protección activada");
     }
 
+    /**
+     * Dibuja el objeto en pantalla.
+     * 
+     * Se representa como:
+     * - Un círculo verde (indica vida/protección)
+     * - Un borde negro para visibilidad
+     * 
+     * @param g2d Objeto gráfico utilizado para renderizar
+     */
     @Override
     public void render(Graphics2D g2d) {
         g2d.setColor(new Color(0, 200, 0));

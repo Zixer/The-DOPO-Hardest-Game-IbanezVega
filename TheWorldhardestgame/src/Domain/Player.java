@@ -61,6 +61,14 @@ public class Player extends DynamicObject {
         return previousY;
     }
 
+    /**
+     * Dibuja al jugador en pantalla.
+     * 
+     * El jugador se representa como un rectángulo con color de relleno
+     * y borde definido.
+     * 
+     * @param g2d Objeto gráfico usado para renderizar
+     */
     @Override
     public void render(Graphics2D g2d) {
         g2d.setColor(fillColor);
@@ -71,6 +79,20 @@ public class Player extends DynamicObject {
         g2d.drawRect(posX, posY, width, height);
     }
 
+    /**
+     * Maneja la muerte o daño del jugador.
+     * 
+     * Si la skin actual puede resistir un golpe:
+     * - Reduce la velocidad.
+     * - Cambia la skin a Blinky.
+     * 
+     * Si el jugador tiene escudo:
+     * - Consume el escudo y evita la muerte.
+     * 
+     * Si no tiene protección:
+     * - Incrementa el contador de muertes.
+     * - Reaparece en el punto de spawn.
+     */
     public void die() {
     	
     	if (currentSkin != null && currentSkin.canResistHit()) {
@@ -89,6 +111,17 @@ public class Player extends DynamicObject {
         respawn();
     }
     
+    /**
+     * Actualiza el movimiento del jugador según las teclas presionadas.
+     * 
+     * Reinicia la velocidad y luego modifica los ejes X e Y
+     * dependiendo de las direcciones activas.
+     * 
+     * @param up true si se mueve hacia arriba
+     * @param down true si se mueve hacia abajo
+     * @param left true si se mueve hacia la izquierda
+     * @param right true si se mueve hacia la derecha
+     */
     public void updateMovement(boolean up, boolean down, boolean left, boolean right) {
         velocityX = 0;
         velocityY = 0;
@@ -118,6 +151,11 @@ public class Player extends DynamicObject {
         return deaths;
     }		
 
+    /**
+     * Hace reaparecer al jugador en su punto de spawn.
+     * 
+     * También detiene completamente su movimiento.
+     */
     private void respawn() {
         posX = spawnX;
         posY = spawnY;
@@ -125,6 +163,18 @@ public class Player extends DynamicObject {
         velocityY = 0;
     }
 
+    /**
+     * Aplica una nueva skin al jugador.
+     * 
+     * La skin puede modificar:
+     * - Color
+     * - Velocidad
+     * - Tamaño
+     * 
+     * Además, conserva el centro visual del jugador al cambiar de tamaño.
+     * 
+     * @param newSkin Nueva skin que se desea aplicar
+     */
     public void applySkinEffect(Skin newSkin) {
         if (newSkin == null) {
             return;
@@ -144,6 +194,12 @@ public class Player extends DynamicObject {
         posY = centerY - height / 2;
     }
 
+    /**
+     * Establece la posición de reaparición del jugador.
+     * 
+     * @param x Nueva posición horizontal de spawn
+     * @param y Nueva posición vertical de spawn
+     */
     public void setSpawnPosition(int x, int y) {
         spawnX = x;
         spawnY = y;
@@ -161,6 +217,11 @@ public class Player extends DynamicObject {
         return currentSkin;
     }
 
+    /**
+     * Cambia el color del borde del jugador.
+     * 
+     * @param color nuevo color del borde
+     */
     public void setBorderColor(Color color) {
         if (color != null) {
             borderColor = color;

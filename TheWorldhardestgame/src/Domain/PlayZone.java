@@ -9,10 +9,19 @@ public class PlayZone extends StaticObject {
         super(x, y, w, h);
     }
 
+    
     @Override
     public void handleCollision(Player p, Level l) {
     }
 
+    /**
+     * Dibuja la zona jugable en pantalla.
+     * 
+     * Se representa como un patrón tipo tablero (cuadriculado),
+     * alternando dos tonos claros para dar textura visual.
+     * 
+     * @param g2d Objeto gráfico utilizado para renderizar
+     */
     @Override
     public void render(Graphics2D g2d) {
         int tile = 40;

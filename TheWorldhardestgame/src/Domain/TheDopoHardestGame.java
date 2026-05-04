@@ -16,6 +16,14 @@ public class TheDopoHardestGame {
         currentLevel = null;
     }
 
+    /**
+     * Carga un nivel según su número.
+     * 
+     * - Inicializa el nivel usando LevelLoader.
+     * - Aplica skins y colores a los jugadores si existen.
+     * 
+     * @param levelNumber número del nivel a cargar
+     */
     public void loadLevel(int levelNumber) {
         currentLevel = LevelLoader.loadLevel(levelNumber);
 
@@ -42,12 +50,23 @@ public class TheDopoHardestGame {
         }
     }
 
+    /**
+     * Actualiza el estado del juego.
+     * 
+     * Delega la actualización al nivel actual.
+     */
     public void update() {
         if (currentLevel != null) {
             currentLevel.update();
         }
     }
     
+    /**
+     * Cambia el skin de un jugador.
+     * 
+     * @param playerNumber número del jugador (1 o 2)
+     * @param skinName nombre del nuevo skin
+     */
     public void setPlayerSkin(int playerNumber, String skinName) {
         if (playerNumber == 1) {
             player1Skin = skinName;
@@ -62,6 +81,12 @@ public class TheDopoHardestGame {
         }
     }
     
+    /**
+     * Crea una instancia de Skin según el nombre.
+     * 
+     * @param skinName nombre del skin
+     * @return instancia de Skin
+     */
     private Skin createSkin(String skinName) {
         if (skinName.equalsIgnoreCase("INKY")) {
             return new InkySkin();
@@ -74,6 +99,11 @@ public class TheDopoHardestGame {
         return new Blinky();
     }
 
+    /**
+     * Renderiza el nivel actual.
+     * 
+     * @param g2d objeto gráfico para dibujar
+     */
     public void render(Graphics2D g2d) {
         if (currentLevel != null) {
             currentLevel.render(g2d);
@@ -98,6 +128,9 @@ public class TheDopoHardestGame {
         }
     }
     
+    /**
+     * Actualiza el movimiento de un jugador según inputs.
+     */
     public void updatePlayerMovement(int playerNumber, boolean up, boolean down, boolean left, boolean right) {
         Player player = getPlayer(playerNumber);
 

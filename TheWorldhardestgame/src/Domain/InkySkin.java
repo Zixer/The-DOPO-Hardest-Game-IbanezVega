@@ -16,12 +16,12 @@ public class InkySkin implements Skin {
 
     @Override
     public int getSpeed() {
-        return 8; // más rápido
+        return 8; 
     }
 
     @Override
     public int getSize() {
-        return 30; // más grande
+        return 30; 
     }
 
     @Override
