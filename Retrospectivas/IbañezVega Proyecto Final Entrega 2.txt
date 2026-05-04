@@ -1,0 +1,44 @@
+ESCUELA COLOMBIANA DE INGENIERÍA
+DESARROLLO ORIENTADO POR OBJETOS [DOPO-POOB]
+PROYECTO Final Ciclo No 1 2026-1
+
+Santiago Ibanez & Sergio Vega
+
+Dirección Repositorio Git: https://github.com/Zixer/The-DOPO-Hardest-Game-IbanezVega
+
+* ¿Cuáles fueron los mini-ciclos definidos?
+El primer mini-ciclo se enfocó en la estructura base del dominio, donde diseñamos e implementamos la jerarquía de clases necesaria para el movimiento del jugador y la lógica de actualización física. En este punto, realizamos pruebas unitarias para asegurar que el desplazamiento del cubo fuera fluido y que los vectores de velocidad respondieran correctamente a las entradas del usuario.
+
+El segundo mini-ciclo consistió en el desarrollo de la interfaz de presentación y el flujo de navegación del juego. Diseñamos los bocetos de las pantallas principales, como el menú y el selector de niveles, e implementamos el sistema de "skins" para que el usuario pudiera personalizar su personaje. Las pruebas se centraron en verificar que el cambio entre paneles fuera estable y que los elementos gráficos se renderizaran correctamente.
+
+El tercer mini-ciclo se dedicó íntegramente a las interacciones y el motor de colisiones entre el jugador y los objetos del nivel. Implementamos la lógica para paredes, enemigos, monedas y zonas, asegurando que cada colisión disparara el efecto esperado (detenerse, morir o recolectar). Este ciclo finalizó con pruebas de integración para garantizar que el bucle principal del juego mantuviera la sincronía entre la lógica y la visualización.
+
+* ¿Cuál es el estado actual del proyecto en términos de mini-ciclos? ¿por qué?
+El proyecto se encuentra actualmente al cierre de la Versión Uno, habiendo completado los tres mini-ciclos de Presentación y Dominio de forma exitosa. Esto se debe a que ya contamos con una arquitectura sólida donde el personaje interactúa con todos los elementos requeridos y el flujo de la aplicación funciona desde el menú hasta el nivel de juego.
+
+* ¿Cuál fue el tiempo total invertido por cada uno de ustedes? (Horas/Hombre)
+Se estima una inversión de 18 horas para el encargado de la lógica del dominio y arquitectura, centradas en el motor de colisiones y la jerarquía de objetos. Por otro lado, el responsable de la interfaz y recursos dedicó 16 horas a la creación de paneles, gestión de colores y navegación de la GUI. En total, el equipo sumó 34 horas de trabajo para esta entrega.
+
+* ¿Cuál consideran fue el mayor logro? ¿Por qué?
+El mayor logro fue el desarrollo de un motor de colisiones polimórfico que gestiona la interacción del jugador de manera genérica. Esto es fundamental porque permite que el nivel procese cualquier objeto sin importar su tipo, facilitando que el código sea limpio, escalable y muy sencillo de mantener a medida que agreguemos más elementos.
+
+* ¿Cuál consideran que fue el mayor problema técnico? ¿Qué hicieron para resolverlo?
+El principal obstáculo fue la sincronización del refresco visual con la lógica interna, lo que causaba errores de visibilidad en los objetos recolectados. Lo resolvimos unificando la clase base de los objetos para incluir estados de visibilidad y configurando un Timer de Swing que fuerza el repintado de la pantalla en cada ciclo de actualización lógica.
+
+* ¿Qué hicieron bien como equipo? ¿Qué se comprometen a hacer para mejorar los resultados?
+Logramos una excelente coordinación mediante la división de capas, lo que permitió trabajar simultáneamente en la lógica y la interfaz sin generar conflictos en el código. Para los siguientes ciclos, nos comprometemos a reforzar la práctica de programación en pareja para la gestión de archivos, asegurando que la carga y guardado de datos sea totalmente robusta.
+
+* Considerando las prácticas XP incluidas en los laboratorios. ¿Cuál fue la más útil? ¿por qué?
+La práctica más útil fue el Diseño Simple, ya que priorizamos tener un núcleo de juego funcional con un nivel de prueba antes de intentar cargar datos externos. Esto nos permitió detectar errores de física y movimiento de forma temprana, garantizando que la base del proyecto fuera estable antes de aumentar la complejidad del sistema.
+
+* ¿Qué referencias usaron? ¿Cuál fue la más útil? Incluyan citas con estándares adecuados.
+
+Google. (2026). Gemini 3: Asistente de inteligencia artificial.
+
+Object Management Group. (2026). UML (Unified Modeling Language) Specification Version 2.5.1.
+
+OpenAI. (2026). ChatGPT: Optimización de lógica orientada a objetos en Java.
+
+Oracle. (2026). Java Platform, Standard Edition API Specification (JDK 21).
+
+La fuente más útil fue Gemini, ya que proporcionó ideas y ayuda en casos de llegar a puntos muertos tanto en código como en planteamientos de problemas según lo propuesto y lo que debíamos agregar.
