@@ -26,6 +26,6 @@ public class ClydeSkin implements Skin {
 
     @Override
     public boolean canResistHit() {
-        return true; // 🔥 clave
+        return true; 
     }
 }
