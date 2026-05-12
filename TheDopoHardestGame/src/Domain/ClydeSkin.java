@@ -21,7 +21,7 @@ public class ClydeSkin implements Skin {
 
     @Override
     public int getSize() {
-        return 20; // tamaño normal
+        return 20; // tamaño  normal
     }
 
     @Override

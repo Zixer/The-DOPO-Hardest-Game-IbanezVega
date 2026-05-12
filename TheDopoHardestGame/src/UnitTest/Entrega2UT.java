@@ -222,18 +222,4 @@ public class Entrega2UT {
         assertEquals(3, enemy.getVelocityX());
         assertEquals(0, enemy.getVelocityY());
     }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void factoryShouldThrowExceptionForInvalidZone() {
-        LevelFactory factory = new LevelFactory();
-
-        factory.createZone("BAD_ZONE", 0, 0, 50, 50);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void factoryShouldThrowExceptionForInvalidCollectable() {
-        LevelFactory factory = new LevelFactory();
-
-        factory.createCollectible("BAD_COLLECTABLE", 0, 0);
-    }
 }

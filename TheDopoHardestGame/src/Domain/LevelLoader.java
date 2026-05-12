@@ -2,10 +2,10 @@ package Domain;
 
 public class LevelLoader {
 
-    private LevelFactory factory;
-
+	private LevelFactory factory;
+	
     public LevelLoader() {
-        this.factory = new LevelFactory();
+    	this.factory = new LevelFactory();
     }
 
     public Level parseFile(String path) {
