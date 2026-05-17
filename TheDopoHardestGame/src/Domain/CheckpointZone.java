@@ -22,15 +22,12 @@ public class CheckpointZone extends Zone {
      * @param l El nivel actual (no se usa directamente aquí, pero se mantiene por consistencia)
      */
     @Override
-    public void handleCollision(Player p, Level l) {
+    public void applyEffectTo(Player player, Level level) {
+        int centerX = posX + (width / 2) - (player.getWidth() / 2);
+        int centerY = posY + (height / 2) - (player.getHeight() / 2);
 
-    
-        int centerX = this.posX + (this.width / 2) - (p.getWidth() / 2);
-        int centerY = this.posY + (this.height / 2) - (p.getHeight() / 2);
-
-        p.setSpawnPosition(centerX, centerY);
-
-        
-        this.color = new Color(0, 255, 0);
+        player.setSpawnPosition(centerX, centerY);
+        color = new Color(0, 255, 0);
     }
+
 }

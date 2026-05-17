@@ -21,9 +21,9 @@ public class FinalZone extends Zone {
      * @param l El nivel actual
      */
     @Override
-    public void handleCollision(Player p, Level l) {
-        if (l.allRequiredObjectsCollected()) {
-            l.setLevelCompleted(true);
+    public void applyEffectTo(Player player, Level level) {
+        if (level.allRequiredObjectsCollected()) {
+            level.setLevelCompleted(true);
             System.out.println("¡Nivel completado!");
         } else {
             System.out.println("Aún faltan objetivos por recoger");

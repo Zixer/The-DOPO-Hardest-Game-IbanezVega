@@ -12,7 +12,7 @@ public abstract class DynamicObject extends GameObject {
         this.velocityX = 0;
         this.velocityY = 0;
     }
-    
+     
     /**
      * Actualiza el estado del objeto en cada ciclo del juego.
      * 

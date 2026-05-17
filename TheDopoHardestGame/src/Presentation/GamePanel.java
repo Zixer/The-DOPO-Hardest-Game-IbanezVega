@@ -13,6 +13,10 @@ public class GamePanel extends JPanel {
     private boolean downPressed;
     private boolean leftPressed;
     private boolean rightPressed;
+    private boolean wPressed;
+    private boolean sPressed;
+    private boolean aPressed;
+    private boolean dPressed;
 
     public GamePanel(TheWorldsHardestGameGUI gui) {
         this.gui = gui;
@@ -39,6 +43,16 @@ public class GamePanel extends JPanel {
         inputMap.put(KeyStroke.getKeyStroke("released DOWN"), "releaseDown");
         inputMap.put(KeyStroke.getKeyStroke("released LEFT"), "releaseLeft");
         inputMap.put(KeyStroke.getKeyStroke("released RIGHT"), "releaseRight");
+        
+        inputMap.put(KeyStroke.getKeyStroke("W"), "pressW");
+        inputMap.put(KeyStroke.getKeyStroke("S"), "pressS");
+        inputMap.put(KeyStroke.getKeyStroke("A"), "pressA");
+        inputMap.put(KeyStroke.getKeyStroke("D"), "pressD");
+
+        inputMap.put(KeyStroke.getKeyStroke("released W"), "releaseW");
+        inputMap.put(KeyStroke.getKeyStroke("released S"), "releaseS");
+        inputMap.put(KeyStroke.getKeyStroke("released A"), "releaseA");
+        inputMap.put(KeyStroke.getKeyStroke("released D"), "releaseD");
 
         inputMap.put(KeyStroke.getKeyStroke("ESCAPE"), "backToMenu");
 
@@ -102,7 +116,63 @@ public class GamePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 stopGame();
-                gui.showScreen("menu");
+                gui.pauseGame();
+            }
+        });
+        
+        actionMap.put("pressW", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                wPressed = true;
+            }
+        });
+
+        actionMap.put("pressS", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sPressed = true;
+            }
+        });
+
+        actionMap.put("pressA", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                aPressed = true;
+            }
+        });
+
+        actionMap.put("pressD", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dPressed = true;
+            }
+        });
+
+        actionMap.put("releaseW", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                wPressed = false;
+            }
+        });
+
+        actionMap.put("releaseS", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sPressed = false;
+            }
+        });
+
+        actionMap.put("releaseA", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                aPressed = false;
+            }
+        });
+
+        actionMap.put("releaseD", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dPressed = false;
             }
         });
     }
@@ -114,6 +184,10 @@ public class GamePanel extends JPanel {
         downPressed = false;
         leftPressed = false;
         rightPressed = false;
+        wPressed = false;
+        sPressed = false;
+        aPressed = false;
+        dPressed = false;
 
         if (timer != null && timer.isRunning()) {
             timer.stop();
@@ -122,8 +196,9 @@ public class GamePanel extends JPanel {
         timer = new Timer(16, new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.updatePlayerMovement(upPressed, downPressed, leftPressed, rightPressed);
-                gui.updateGame();
+            	gui.updatePlayerMovement(1, upPressed, downPressed, leftPressed, rightPressed);
+            	gui.updatePlayerMovement(2, wPressed, sPressed, aPressed, dPressed);
+            	gui.updateGame();
 
                 if (gui.isTimeUp()) {
                     timer.stop();
@@ -152,6 +227,7 @@ public class GamePanel extends JPanel {
         gui.renderGame(g2d);
         drawHUD(g2d);
     }
+    
 
     private void drawHUD(Graphics2D g2d) {
         g2d.setColor(Color.BLACK);

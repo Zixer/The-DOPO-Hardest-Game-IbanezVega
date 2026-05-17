@@ -8,6 +8,7 @@ public class Coin extends Collectable {
     public Coin(int x, int y) {
         super(x, y, 10, 10);
     }
+    
 
     /**
      * Aplica el efecto cuando el jugador recoge la moneda.
@@ -37,22 +38,13 @@ public class Coin extends Collectable {
         return !collected;
     }
 
-    /**
-     * Dibuja la moneda en pantalla.
-     * 
-     * Se representa como:
-     * - Un círculo amarillo relleno
-     * - Un borde naranja para dar detalle visual
-     * 
-     * @param g2d Objeto gráfico utilizado para renderizar
-     */
     @Override
-    public void render(Graphics2D g2d) {
-
-        g2d.setColor(Color.YELLOW);
-        g2d.fillOval(posX, posY, width, height);
-
-        g2d.setColor(Color.ORANGE);
-        g2d.drawOval(posX, posY, width, height);
+    public Object[] getData() {
+        return new Object[] {
+            posX, posY, width, height,
+            Color.YELLOW,
+            Color.BLACK,
+            "OVAL"
+        };
     }
 }

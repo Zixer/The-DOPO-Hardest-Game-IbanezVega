@@ -20,32 +20,11 @@ public class InitialZone extends Zone {
      * @param l El nivel actual
      */
     @Override
-    public void handleCollision(Player p, Level l) {
-        // Centro de la zona como spawn
-        p.setSpawnPosition(
-            this.posX + (this.width / 2),
-            this.posY + (this.height / 2)
+    public void applyEffectTo(Player player, Level level) {
+        player.setSpawnPosition(
+            posX + (width / 2) - (player.getWidth() / 2),
+            posY + (height / 2) - (player.getHeight() / 2)
         );
     }
 
-    /**
-     * Dibuja la zona inicial en pantalla.
-     * 
-     * Se representa como:
-     * - Un rectángulo verde (zona activa)
-     * - Un borde negro para mejor visibilidad
-     * 
-     * @param g2d Objeto gráfico utilizado para renderizar
-     */
-    @Override
-    public void render(Graphics2D g2d) {
-
-        // Zona verde
-        g2d.setColor(color);
-        g2d.fillRect(posX, posY, width, height);
-
-        // Borde para diferenciar
-        g2d.setColor(Color.BLACK);
-        g2d.drawRect(posX, posY, width, height);
-    }
 }

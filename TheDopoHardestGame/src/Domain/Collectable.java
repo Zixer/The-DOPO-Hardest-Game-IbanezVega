@@ -23,9 +23,9 @@ public abstract class Collectable extends StaticObject {
      * @param l El nivel actual
      */
     @Override
-    public void handleCollision(Player p, Level l) {
+    public void applyEffectTo(Player player, Level level) {
         if (!collected) {
-            applyEffect(p, l);
+            applyEffect(player, level);
             collected = true;
         }
     }

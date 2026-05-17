@@ -132,7 +132,7 @@ public class ModePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.showScreen("levelSelector");
+            	gui.startColorSelectionForMode("NORMAL");
             }
         });
 
@@ -148,7 +148,7 @@ public class ModePanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                gui.startPvSPColorSelection();
+            	gui.startColorSelectionForMode("PVSP");
             }
         });
 

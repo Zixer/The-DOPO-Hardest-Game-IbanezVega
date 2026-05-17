@@ -23,11 +23,6 @@ public abstract class GameObject {
      * 
      * @param g2d Objeto gráfico utilizado para renderizar
      */
-    public abstract void render(Graphics2D g2d);
-
-    public boolean isVisible() {
-        return true;
-    }
 
     /**
      * Indica si este objeto es necesario para completar el nivel.
@@ -65,7 +60,7 @@ public abstract class GameObject {
      * @param p El jugador que colisiona con el objeto
      * @param l El nivel actual
      */
-    public abstract void handleCollision(Player p, Level l);
+    public abstract void applyEffectTo(Player player, Level level);
 
     public int getPosX() { return posX; }
     
@@ -78,4 +73,10 @@ public abstract class GameObject {
     public int getWidth() { return width; }
     
     public int getHeight() { return height; }
+    
+    public abstract Object[] getData();
+
+	public boolean isVisible() {
+		return true;
+	}
 }

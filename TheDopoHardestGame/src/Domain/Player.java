@@ -9,6 +9,9 @@ public class Player extends DynamicObject {
 	private int deaths;
     private Skin currentSkin;
     private boolean shield;
+    private boolean immune;
+    private long immunityStartTime;
+    private long immunityDuration;
 
     private int spawnX;
     private int spawnY;
@@ -24,6 +27,10 @@ public class Player extends DynamicObject {
         this.shield = false;
         this.deaths = 0;
         this.currentSkin = initialSkin;
+        this.immune = false;
+        this.immunityStartTime = 0;
+        this.immunityDuration = 1500;
+        
         this.spawnX = x;
         this.spawnY = y;
 
@@ -35,11 +42,24 @@ public class Player extends DynamicObject {
             this.fillColor = Color.RED;
         }
     }
+    
+    @Override
+    public Object[] getData() {
+        return new Object[] {
+            posX, posY, width, height,
+            fillColor,
+            borderColor,
+            "RECT"
+        };
+    }
 
     @Override
     public void update() {
         previousX = posX;
         previousY = posY;
+
+        updateImmunity();
+
         super.move();
     }
     
@@ -48,9 +68,34 @@ public class Player extends DynamicObject {
         posY = previousY;
     }
 
-    @Override
-    public void handleCollision(Player p, Level l) {
-        // El jugador no necesita reaccionar al chocar consigo mismo.
+    public void receiveDamageFrom(GameObject source) {
+        die();
+    }
+
+    public void blockAgainst(GameObject obstacle) {
+        int previousRight = previousX + width;
+        int previousLeft = previousX;
+        int previousBottom = previousY + height;
+        int previousTop = previousY;
+
+        int obstacleLeft = obstacle.getPosX();
+        int obstacleRight = obstacle.getPosX() + obstacle.getWidth();
+        int obstacleTop = obstacle.getPosY();
+        int obstacleBottom = obstacle.getPosY() + obstacle.getHeight();
+
+        if (previousBottom <= obstacleTop) {
+            posY = obstacleTop - height;
+            velocityY = 0;
+        } else if (previousTop >= obstacleBottom) {
+            posY = obstacleBottom;
+            velocityY = 0;
+        } else if (previousRight <= obstacleLeft) {
+            posX = obstacleLeft - width;
+            velocityX = 0;
+        } else if (previousLeft >= obstacleRight) {
+            posX = obstacleRight;
+            velocityX = 0;
+        }
     }
     
     public int getPreviousX() {
@@ -69,15 +114,6 @@ public class Player extends DynamicObject {
      * 
      * @param g2d Objeto gráfico usado para renderizar
      */
-    @Override
-    public void render(Graphics2D g2d) {
-        g2d.setColor(fillColor);
-        g2d.fillRect(posX, posY, width, height);
-
-        g2d.setColor(borderColor);
-        g2d.setStroke(new BasicStroke(3));
-        g2d.drawRect(posX, posY, width, height);
-    }
 
     /**
      * Maneja la muerte o daño del jugador.
@@ -94,16 +130,22 @@ public class Player extends DynamicObject {
      * - Reaparece en el punto de spawn.
      */
     public void die() {
-    	
-    	if (currentSkin != null && currentSkin.canResistHit()) {
-            speed = (int)(speed * 0.7);
-            currentSkin = new Blinky();
-            fillColor = currentSkin.getColor();
+
+        if (immune) {
             return;
         }
-    	
+
         if (shield) {
             shield = false;
+            activateImmunity();
+            return;
+        }
+
+        if (currentSkin != null && currentSkin.canResistHit()) {
+            fillColor = Color.RED;
+            speed = 3; // 0.7x aprox de 5
+            currentSkin = new Blinky();
+            activateImmunity();
             return;
         }
 
@@ -193,6 +235,25 @@ public class Player extends DynamicObject {
         posX = centerX - width / 2;
         posY = centerY - height / 2;
     }
+    
+    private void activateImmunity() {
+        immune = true;
+        immunityStartTime = System.currentTimeMillis();
+    }
+
+    private void updateImmunity() {
+        if (immune) {
+            long elapsed = System.currentTimeMillis() - immunityStartTime;
+
+            if (elapsed >= immunityDuration) {
+                immune = false;
+            }
+        }
+    }
+
+    public boolean isImmune() {
+        return immune;
+    }
 
     /**
      * Establece la posición de reaparición del jugador.
@@ -241,4 +302,13 @@ public class Player extends DynamicObject {
     public Color getFillColor() {
         return fillColor;
     }
+    
+    @Override
+    public void applyEffectTo(Player otherPlayer, Level level) {
+        if (this != otherPlayer) {
+            this.die();
+            otherPlayer.die();
+        }
+    }
+    
 }

@@ -8,8 +8,17 @@ public class Enemy extends DynamicObject {
     public Enemy(int x, int y, int speed) {
         super(x, y, 15, 15, speed);
     }
-
     
+    @Override
+    public Object[] getData() {
+        return new Object[] {
+            posX, posY, width, height,
+            Color.BLUE,
+            Color.BLACK,
+            "OVAL"
+        };
+    }
+
     /**
      * Actualiza el estado del enemigo en cada ciclo del juego.
      * 
@@ -31,28 +40,10 @@ public class Enemy extends DynamicObject {
      * @param l El nivel actual
      */
     @Override
-    public void handleCollision(Player p, Level l) {
-        p.die();
-        System.out.println("El jugador ha muerto por contacto con enemigo.");
+    public void applyEffectTo(Player player, Level level) {
+        player.receiveDamageFrom(this);
     }
 
-    /**
-     * Dibuja el enemigo en pantalla.
-     * 
-     * Se representa como:
-     * - Un círculo azul (cuerpo)
-     * - Un borde negro más grande (efecto visual de sombra)
-     * 
-     * @param g2d Objeto gráfico utilizado para renderizar
-     */
-    @Override
-    public void render(Graphics2D g2d) {
-        g2d.setColor(Color.BLACK);
-        g2d.fillOval(posX - 4, posY - 4, width + 8, height + 8);
-
-        g2d.setColor(Color.BLUE);
-        g2d.fillOval(posX, posY, width, height);
-    }
 
     // ====================================================================
     // MOVIMIENTO

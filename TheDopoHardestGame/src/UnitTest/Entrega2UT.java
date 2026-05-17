@@ -13,8 +13,8 @@ public class Entrega2UT {
         Player player = new Player(0, 0, null);
         Coin coin = new Coin(0, 0);
 
-        coin.handleCollision(player, level);
-        coin.handleCollision(player, level);
+        coin.applyEffectTo(player, level);
+        coin.applyEffectTo(player, level);
 
         assertEquals(1, level.getCoinsCollected());
         assertTrue(coin.isCollected());
@@ -27,14 +27,10 @@ public class Entrega2UT {
         Player player = new Player(0, 0, null);
         LifeSource life = new LifeSource(0, 0);
 
-        life.handleCollision(player, level);
+        life.applyEffectTo(player, level);
         player.die();
 
         assertEquals(0, player.getDeaths());
-
-        player.die();
-
-        assertEquals(1, player.getDeaths());
     }
 
     @Test
@@ -43,7 +39,7 @@ public class Entrega2UT {
         Player player = new Player(0, 0, null);
         CheckpointZone checkpoint = new CheckpointZone(100, 100, 40, 40);
 
-        checkpoint.handleCollision(player, level);
+        checkpoint.applyEffectTo(player, level);
 
         player.setPosX(300);
         player.setPosY(300);
@@ -62,7 +58,7 @@ public class Entrega2UT {
 
         level.addGameObject(coin);
 
-        finalZone.handleCollision(player, level);
+        finalZone.applyEffectTo(player, level);
 
         assertFalse(level.isLevelCompleted());
     }
@@ -76,8 +72,8 @@ public class Entrega2UT {
 
         level.addGameObject(coin);
 
-        coin.handleCollision(player, level);
-        finalZone.handleCollision(player, level);
+        coin.applyEffectTo(player, level);
+        finalZone.applyEffectTo(player, level);
 
         assertTrue(level.isLevelCompleted());
     }
@@ -98,7 +94,7 @@ public class Entrega2UT {
         player.setVelocityX(20);
         player.update();
 
-        wall.handleCollision(player, level);
+        wall.applyEffectTo(player, level);
 
         assertEquals(90, player.getPosX());
         assertEquals(0, player.getVelocityX());
@@ -142,7 +138,7 @@ public class Entrega2UT {
         Player player = new Player(0, 0, null);
         Enemy enemy = new Enemy(0, 0, 5);
 
-        enemy.handleCollision(player, level);
+        enemy.applyEffectTo(player, level);
 
         assertEquals(1, player.getDeaths());
     }

@@ -12,22 +12,22 @@ public abstract class Zone extends StaticObject {
     }
 
     @Override
-    public abstract void handleCollision(Player p, Level l);
+    public abstract void applyEffectTo(Player player, Level level);
 
     @Override
     public void update() {
         // Las zonas no se mueven
     }
 
-    @Override
-    public void render(Graphics2D g2d) {
-        g2d.setColor(color);
-        g2d.fillRect(posX, posY, width, height);
-
-        g2d.setColor(Color.BLACK);
-        g2d.drawRect(posX, posY, width, height);
+    public Object[] getData() {
+        return new Object[] {
+            posX, posY, width, height,
+            color,
+            new Color(0, 0, 0, 0),
+            "RECT"
+        };
     }
-
+    
     // Getter
     public Color getColor() {
         return color;

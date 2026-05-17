@@ -71,7 +71,7 @@ public class BorderColorPanel extends JPanel {
 
         add(subtitle);
 
-        redButton = createColorButton("RED", Color.RED);
+        redButton = createColorButton("BLACK", Color.BLACK);
         redButton.setBounds(340, 190, 220, 45);
 
         add(redButton);
@@ -177,7 +177,7 @@ public class BorderColorPanel extends JPanel {
 
     private void prepareActions() {
 
-        redButton.addActionListener(e -> gui.setBorderColor(Color.RED));
+        redButton.addActionListener(e -> gui.setBorderColor(Color.BLACK));
 
         orangeButton.addActionListener(e -> gui.setBorderColor(Color.ORANGE));
 

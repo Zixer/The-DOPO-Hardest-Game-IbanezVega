@@ -13,6 +13,8 @@ public class MenuPanel extends JPanel {
     private JLabel subtitle;
     private JButton playButton;
     private JButton quitButton;
+    private JButton loadButton;
+    
 
     public MenuPanel(TheWorldsHardestGameGUI gui) {
         this.gui = gui;
@@ -64,12 +66,18 @@ public class MenuPanel extends JPanel {
         add(subtitle);
 
         playButton = createGameButton("PLAY");
-        playButton.setBounds(315, 330, 130, 50);
+        playButton.setBounds(245, 330, 130, 50);
         add(playButton);
 
+        loadButton = createGameButton("LOAD");
+        loadButton.setBounds(385, 330, 130, 50);
+        add(loadButton);
+
         quitButton = createGameButton("QUIT");
-        quitButton.setBounds(465, 330, 130, 50);
+        quitButton.setBounds(525, 330, 130, 50);
         add(quitButton);
+        
+        
     }
 
     private JButton createGameButton(String text) {
@@ -101,6 +109,13 @@ public class MenuPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gui.showScreen("instructions");
+            }
+        });
+        
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gui.loadGame();
             }
         });
 

@@ -57,6 +57,21 @@ public class Level {
         	checkCollisions(player);
         	resolveWallCollision(player);
         }
+        
+        checkPlayerCollisions();
+    }
+    
+    private void checkPlayerCollisions() {
+        for (int i = 0; i < players.size(); i++) {
+            for (int j = i + 1; j < players.size(); j++) {
+                Player p1 = players.get(i);
+                Player p2 = players.get(j);
+
+                if (isColliding(p1, p2)) {
+                    p1.applyEffectTo(p2, this);
+                }
+            }
+        }
     }
     
     /**
@@ -140,28 +155,7 @@ public class Level {
 
         return remaining;
     }
-
-    /**
-     * Dibuja todos los elementos visibles del nivel.
-     * 
-     * Primero renderiza los objetos del juego y luego los jugadores.
-     * 
-     * @param g2d Objeto gráfico utilizado para dibujar en pantalla
-     */
-    public void render(Graphics2D g2d) {
-        for (GameObject obj : gameObjects) {
-            if (obj.isVisible()) {
-                obj.render(g2d);
-            }
-        }
-
-        for (Player player : players) {
-            if (player.isVisible()) {
-                player.render(g2d);
-            }
-        }
-    }
-
+    
     /**
      * Revisa las colisiones entre un jugador y todos los objetos del nivel.
      * 
@@ -172,7 +166,7 @@ public class Level {
     private void checkCollisions(Player player) {
         for (GameObject obj : gameObjects) {
             if (isColliding(player, obj)) {
-                obj.handleCollision(player, this);
+            	obj.applyEffectTo(player, this);
             }
         }
     }
@@ -272,5 +266,23 @@ public class Level {
 
     public int getTimeLimit() {
         return timeLimit;
+    }
+    
+    public Object[][] getObjectsData() {
+        ArrayList<Object[]> data = new ArrayList<Object[]>();
+
+        for (GameObject obj : gameObjects) {
+            if (obj.isVisible()) {
+                data.add(obj.getData());
+            }
+        }
+
+        for (Player player : players) {
+            if (player.isVisible()) {
+                data.add(player.getData());
+            }
+        }
+
+        return data.toArray(new Object[data.size()][]);
     }
 }

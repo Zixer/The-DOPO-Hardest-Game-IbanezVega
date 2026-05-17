@@ -7,11 +7,6 @@ public class TheDopoHardestGame {
 
     private Level currentLevel;
 
-    private Color player1Border;
-    private Color player2Border;
-    private String player1Skin = "BLINKY";
-    private String player2Skin = "BLINKY";
-
     public TheDopoHardestGame() {
         currentLevel = null;
     }
@@ -24,29 +19,20 @@ public class TheDopoHardestGame {
      * 
      * @param levelNumber número del nivel a cargar
      */
-    public void loadLevel(int levelNumber) {
-        currentLevel = LevelLoader.loadLevel(levelNumber);
+    public void loadLevel(int levelNumber, String mode,String player1Skin,Color player1Border,String player2Skin,Color player2Border) {
+        currentLevel = LevelLoader.loadLevel(levelNumber, mode);
 
-        if (currentLevel != null) {
+        Player p1 = currentLevel.getPlayer(0);
+        Player p2 = currentLevel.getPlayer(1);
 
-            Player player1 = currentLevel.getPlayer(0);
-            Player player2 = currentLevel.getPlayer(1);
+        if (p1 != null) {
+            p1.applySkinEffect(createSkin(player1Skin));
+            p1.setBorderColor(player1Border);
+        }
 
-            if (player1 != null) {
-                player1.applySkinEffect(createSkin(player1Skin));
-
-                if (player1Border != null) {
-                    player1.setBorderColor(player1Border);
-                }
-            }
-
-            if (player2 != null) {
-                player2.applySkinEffect(createSkin(player2Skin));
-
-                if (player2Border != null) {
-                    player2.setBorderColor(player2Border);
-                }
-            }
+        if (p2 != null) {
+            p2.applySkinEffect(createSkin(player2Skin));
+            p2.setBorderColor(player2Border);
         }
     }
 
@@ -58,26 +44,6 @@ public class TheDopoHardestGame {
     public void update() {
         if (currentLevel != null) {
             currentLevel.update();
-        }
-    }
-    
-    /**
-     * Cambia el skin de un jugador.
-     * 
-     * @param playerNumber número del jugador (1 o 2)
-     * @param skinName nombre del nuevo skin
-     */
-    public void setPlayerSkin(int playerNumber, String skinName) {
-        if (playerNumber == 1) {
-            player1Skin = skinName;
-        } else if (playerNumber == 2) {
-            player2Skin = skinName;
-        }
-
-        Player player = getPlayer(playerNumber);
-
-        if (player != null) {
-            player.applySkinEffect(createSkin(skinName));
         }
     }
     
@@ -97,35 +63,6 @@ public class TheDopoHardestGame {
         }
 
         return new Blinky();
-    }
-
-    /**
-     * Renderiza el nivel actual.
-     * 
-     * @param g2d objeto gráfico para dibujar
-     */
-    public void render(Graphics2D g2d) {
-        if (currentLevel != null) {
-            currentLevel.render(g2d);
-        }
-    }
-
-    public void setPlayerBorderColor(int playerNumber, Color color) {
-
-        if (playerNumber == 1) {
-            player1Border = color;
-
-            if (currentLevel != null && currentLevel.getPlayer(0) != null) {
-                currentLevel.getPlayer(0).setBorderColor(color);
-            }
-
-        } else if (playerNumber == 2) {
-            player2Border = color;
-
-            if (currentLevel != null && currentLevel.getPlayer(1) != null) {
-                currentLevel.getPlayer(1).setBorderColor(color);
-            }
-        }
     }
     
     /**
@@ -180,14 +117,6 @@ public class TheDopoHardestGame {
             player.stopHorizontalMovement();
         }
     }
-    
-    public void resetPlayerConfiguration() {
-        player1Skin = "BLINKY";
-        player2Skin = "BLINKY";
-
-        player1Border = Color.BLACK;
-        player2Border = Color.BLACK;
-    }
 
     private Player getPlayer(int playerNumber) {
         if (currentLevel == null) {
@@ -226,11 +155,47 @@ public class TheDopoHardestGame {
         return currentLevel.getTimeRemaining();
     }
 
-    public Color getPlayerBorderColor(int playerNumber) {
-        return (playerNumber == 1) ? player1Border : player2Border;
-    }
-
     public Level getCurrentLevel() {
         return currentLevel;
+    }
+    
+    public Object[][] getObjectsData() {
+        if (currentLevel == null) {
+            return new Object[0][0];
+        }
+
+        return currentLevel.getObjectsData();
+    }
+    
+    public void saveGame(int levelNumber, String mode, String path) throws java.io.IOException {
+        if (currentLevel != null) {
+            SaveManager.saveGame(currentLevel, levelNumber, mode, path);
+        }
+    }
+    
+    public int loadSavedGame(String path) throws Exception {
+
+        LoadedGame loaded = SaveManager.loadGame(path);
+
+        loadLevel(
+            loaded.levelNumber,
+            loaded.mode,
+            loaded.player1.skin,
+            loaded.player1.border,
+            loaded.player2 != null ? loaded.player2.skin : "BLINKY",
+            loaded.player2 != null ? loaded.player2.border : java.awt.Color.BLACK
+        );
+
+        Player p1 = currentLevel.getPlayer(0);
+        p1.setPosX(loaded.player1.x);
+        p1.setPosY(loaded.player1.y);
+
+        if (loaded.player2 != null) {
+            Player p2 = currentLevel.getPlayer(1);
+            p2.setPosX(loaded.player2.x);
+            p2.setPosY(loaded.player2.y);
+        }
+
+        return loaded.levelNumber;
     }
 }

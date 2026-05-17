@@ -17,6 +17,13 @@ public class TheWorldsHardestGameGUI extends JFrame {
 
     private int currentPlayer = 1;
     private int selectedLevel;
+    private String modeInProgress;
+    
+    private Color player1Border;
+    private Color player2Border;
+
+    private String player1Skin;
+    private String player2Skin;
 
     public TheWorldsHardestGameGUI() {
         prepareElements();
@@ -45,6 +52,7 @@ public class TheWorldsHardestGameGUI extends JFrame {
         mainPanel.add(colorSelectionPanel, "colorSelection");
         mainPanel.add(new LevelSelectorPanel(this), "levelSelector");
         mainPanel.add(gamePanel, "game");
+        mainPanel.add(new PausePanel(this), "pause");
 
         add(mainPanel);
     }
@@ -59,25 +67,44 @@ public class TheWorldsHardestGameGUI extends JFrame {
         if (screenName.equals("colorSelection")) {
             colorSelectionPanel.updateTitle();
         }
-    }
+    }	
 
     public int getCurrentPlayer() {
         return currentPlayer;
     }
 
     public void startPvSPColorSelection() {
-        game.resetPlayerConfiguration();
         currentPlayer = 1;
         showScreen("borderColor");
+    }
+    
+    public void pauseGame() {
+        gamePanel.stopGame();
+        showScreen("pause");
+    }
+
+    public void resumeGame() {
+        showScreen("game");
+        gamePanel.startGame();
+    }
+
+    public void retryLevel() {
+        selectLevel(selectedLevel);
     }
 
     public void setBorderColor(Color color) {
         if (currentPlayer == 1) {
-            game.setPlayerBorderColor(1, color);
-            currentPlayer = 2;
-            showScreen("borderColor");
+            player1Border = color;
+
+            if (modeInProgress.equals("PVSP")) {
+                currentPlayer = 2;
+                showScreen("borderColor");
+            } else {
+                showScreen("colorSelection");
+            }
+
         } else {
-            game.setPlayerBorderColor(2, color);
+            player2Border = color;
             currentPlayer = 1;
             showScreen("colorSelection");
         }
@@ -85,11 +112,17 @@ public class TheWorldsHardestGameGUI extends JFrame {
 
     public void setPlayerSkin(String skinName) {
         if (currentPlayer == 1) {
-            game.setPlayerSkin(1, skinName);
-            currentPlayer = 2;
-            showScreen("colorSelection");
+            player1Skin = skinName;
+
+            if (modeInProgress.equals("PVSP")) {
+                currentPlayer = 2;
+                showScreen("colorSelection");
+            } else {
+                showScreen("levelSelector");
+            }
+
         } else {
-            game.setPlayerSkin(2, skinName);
+            player2Skin = skinName;
             currentPlayer = 1;
             showScreen("levelSelector");
         }
@@ -99,15 +132,23 @@ public class TheWorldsHardestGameGUI extends JFrame {
         selectedLevel = level;
 
         try {
-            game.loadLevel(selectedLevel);
+            game.loadLevel(selectedLevel,modeInProgress,player1Skin,player1Border,player2Skin,player2Border);
+
             showScreen("game");
             gamePanel.startGame();
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(
                 this,
                 "No se pudo cargar el nivel " + selectedLevel
             );
         }
+    }
+    
+    public void startColorSelectionForMode(String mode) {
+        modeInProgress = mode;
+        currentPlayer = 1;
+        showScreen("borderColor");
     }
     
     public void handleTimeUp() {
@@ -124,6 +165,79 @@ public class TheWorldsHardestGameGUI extends JFrame {
 
         if (option == 0) {
             selectLevel(selectedLevel);
+        }
+    }
+    
+    public void renderGame(Graphics2D g2d) {
+        Object[][] objects = game.getObjectsData();
+
+        for (Object[] obj : objects) {
+            drawObjectData(g2d, obj);
+        }
+    }
+
+    private void drawObjectData(Graphics2D g2d, Object[] obj) {
+
+        int x = (Integer) obj[0];
+        int y = (Integer) obj[1];
+        int w = (Integer) obj[2];
+        int h = (Integer) obj[3];
+
+        Color fill = (Color) obj[4];
+        Color border = (Color) obj[5];
+        
+        String shape = (String) obj[6];
+        
+        // Objetos invisibles
+        if (fill.getAlpha() == 0 && border.getAlpha() == 0) {
+            return;
+        }
+        // PlayZone tipo tablero
+        if (shape.equals("CHECKER")) {
+            drawCheckerZone(g2d, x, y, w, h, border);
+            return;
+        }
+        // Relleno
+        g2d.setColor(fill);
+        if (shape.equals("OVAL")) {
+            g2d.fillOval(x, y, w, h);
+        } else {
+            g2d.fillRect(x, y, w, h);
+        }
+        // Borde más grueso
+        g2d.setColor(border);
+        g2d.setStroke(new BasicStroke(4));
+        if (shape.equals("OVAL")) {
+            g2d.drawOval(x, y, w, h);
+        } else {
+            g2d.drawRect(x, y, w, h);
+        }
+    }
+
+    private void drawCheckerZone(Graphics2D g2d, int x, int y, int w, int h, Color border) {
+
+        int tile = 40;
+
+        for (int row = y; row < y + h; row += tile) {
+            for (int col = x; col < x + w; col += tile) {
+
+                int tileW = Math.min(tile, x + w - col);
+                int tileH = Math.min(tile, y + h - row);
+
+                if (((col + row) / tile) % 2 == 0) {
+                    g2d.setColor(new Color(245, 245, 255));
+                } else {
+                    g2d.setColor(new Color(225, 225, 250));
+                }
+                g2d.fillRect(col, row, tileW, tileH);
+            }
+        }
+
+        // SOLO dibuja borde si no es transparente
+        if (border.getAlpha() > 0) {
+            g2d.setColor(border);
+            g2d.setStroke(new BasicStroke(3));
+            g2d.drawRect(x, y, w, h);
         }
     }
     
@@ -150,10 +264,6 @@ public class TheWorldsHardestGameGUI extends JFrame {
     public void updateGame() {
         game.update();
     }
-
-    public void renderGame(Graphics2D g2d) {
-        game.render(g2d);
-    }
     
     public void movePlayerUp() {
         game.movePlayerUp(1);
@@ -178,9 +288,52 @@ public class TheWorldsHardestGameGUI extends JFrame {
     public void stopPlayerHorizontalMovement() {
         game.stopPlayerHorizontalMovement(1);
     }
+    
+    public void updatePlayerMovement(int playerNumber, boolean up, boolean down, boolean left, boolean right) {
+        game.updatePlayerMovement(playerNumber, up, down, left, right);
+    }
 
     public static void main(String[] args) {
         TheWorldsHardestGameGUI gui = new TheWorldsHardestGameGUI();
         gui.setVisible(true);
+    }
+    
+    public void saveGame() {
+        try {
+            game.saveGame(
+                selectedLevel,
+                modeInProgress,
+                "data/saves/save1.txt"
+            );
+
+            JOptionPane.showMessageDialog(
+                this,
+                "Partida guardada correctamente."
+            );
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "No se pudo guardar la partida."
+            );
+        }
+    }
+    
+    public void loadGame() {
+
+        try {
+            selectedLevel = game.loadSavedGame("data/saves/save1.txt");
+
+            showScreen("game");
+            gamePanel.startGame();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "No se pudo cargar la partida."
+            );
+
+            e.printStackTrace();
+        }
     }
 }

@@ -1,5 +1,9 @@
 package Domain;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class LevelLoader {
 
 	private LevelFactory factory;
@@ -13,23 +17,27 @@ public class LevelLoader {
         return level;
     }
 
-    public static Level loadLevel(int levelNumber) {
+    public static Level loadLevel(int levelNumber, String mode) {
         if (levelNumber == 1) {
-            return createLevelOne();
+            return createLevelOne(mode);
         } else if (levelNumber == 2) {
-            return createLevelTwo();
+            return createLevelTwo(mode);
         } else {
-            return createLevelThree();
+            return createLevelThree(mode);
         }
     }
 
-    private static Level createLevelOne() {
+    private static Level createLevelOne(String mode) {
         Level level = new Level(60);
 
         // Jugador
-        Player player = new Player(80, 290, new Blinky());
-        level.addPlayer(player);
+        Player player1 = new Player(200, 315, new Blinky());
+        level.addPlayer(player1);
 
+        if (mode.equals("PVSP")) {
+            Player player2 = new Player(780, 315, new Blinky());
+            level.addPlayer(player2);
+        }
         // Zonas seguras
         level.addGameObject(new InitialZone(40, 250, 120, 120));
         level.addGameObject(new FinalZone(720, 250, 120, 120));
@@ -80,47 +88,125 @@ public class LevelLoader {
         return level;
     }
 
-    private static Level createLevelTwo() {
-        Level level = new Level(70);
+    private static Level createLevelTwo(String mode) {
+    	
+        Level level = new Level(60);
+        try {
+            BufferedReader br = new BufferedReader(
+                new FileReader("data/levels/level1.txt")
+            );
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
+                if (line.startsWith("TIME=")) {
+                    level = new Level(Integer.parseInt(line.split("=")[1]));
+                    continue;
+                }
+                String[] parts = line.split(",");
+                switch (parts[0]) {
+                    case "PLAYER":
+                        Player player1 = new Player(
+                            Integer.parseInt(parts[1]),
+                            Integer.parseInt(parts[2]),
+                            new Blinky()
+                        );
+                        level.addPlayer(player1);
+                        if (mode.equals("PVSP")) {
+                            Player player2 = new Player(
+                                800,
+                                315,
+                                new Blinky()
+                            );
 
-        Player player = new Player(70, 80, new Blinky());
-        level.addPlayer(player);
-
-        level.addGameObject(new InitialZone(40, 50, 100, 100));
-        level.addGameObject(new FinalZone(720, 450, 100, 100));
-        level.addGameObject(new CheckpointZone(380, 250, 80, 80));
-
-        level.addGameObject(new Wall(220, 0, 40, 420));
-        level.addGameObject(new Wall(580, 180, 40, 420));
-
-        level.addGameObject(new Coin(350, 120));
-        level.addGameObject(new Coin(450, 380));
-        level.addGameObject(new LifeSource(410, 270));
-
-        Enemy enemy = new Enemy(320, 300, 4);
-        enemy.setVelocityX(4);
-        level.addGameObject(enemy);
-
+                            level.addPlayer(player2);
+                        }
+                        break;
+                    case "PLAYZONE":
+                        level.addGameObject(new PlayZone(
+                            Integer.parseInt(parts[1]),
+                            Integer.parseInt(parts[2]),
+                            Integer.parseInt(parts[3]),
+                            Integer.parseInt(parts[4])
+                        ));
+                        break;
+                    case "INITIAL_ZONE":
+                        level.addGameObject(new InitialZone(
+                            Integer.parseInt(parts[1]),
+                            Integer.parseInt(parts[2]),
+                            Integer.parseInt(parts[3]),
+                            Integer.parseInt(parts[4])
+                        ));
+                        break;
+                    case "FINAL_ZONE":
+                        level.addGameObject(new FinalZone(
+                            Integer.parseInt(parts[1]),
+                            Integer.parseInt(parts[2]),
+                            Integer.parseInt(parts[3]),
+                            Integer.parseInt(parts[4])
+                        ));
+                        break;
+                    case "WALL":
+                        level.addGameObject(new Wall(
+                            Integer.parseInt(parts[1]),
+                            Integer.parseInt(parts[2]),
+                            Integer.parseInt(parts[3]),
+                            Integer.parseInt(parts[4])
+                        ));
+                        break;
+                    case "COIN":
+                        level.addGameObject(new Coin(
+                            Integer.parseInt(parts[1]),
+                            Integer.parseInt(parts[2])
+                        ));
+                        break;
+                    case "ENEMY":
+                        Enemy enemy = new Enemy(
+                            Integer.parseInt(parts[1]),
+                            Integer.parseInt(parts[2]),
+                            Math.abs(Integer.parseInt(parts[4]))
+                        );
+                        if (parts[3].equals("VERTICAL")) {
+                            enemy.setVelocityY(Integer.parseInt(parts[4]));
+                        } else if (parts[3].equals("HORIZONTAL")) {
+                            enemy.setVelocityX(Integer.parseInt(parts[4]));
+                        }
+                        level.addGameObject(enemy);
+                        break;
+                }
+            }
+            br.close();
+        } catch (IOException e) {
+            System.out.println("Error cargando archivo del nivel");
+            e.printStackTrace();
+        }
         return level;
     }
 
-    private static Level createLevelThree() {
+    private static Level createLevelThree(String mode) {
         Level level = new Level(60);
 
         // Jugador
-        Player player = new Player(200, 315, new Blinky());
-        level.addPlayer(player);
+        Player player1 = new Player(200, 315, new Blinky());
+        level.addPlayer(player1);
+
+        if (mode.equals("PVSP")) {
+            Player player2 = new Player(800, 315, new Blinky());
+            level.addPlayer(player2);
+        }
 
         // Fondo jugable tipo original
         
         level.addGameObject(new PlayZone(255, 265, 80, 200));  // cuello izquierdo
         level.addGameObject(new PlayZone(335, 265, 335, 155)); // corredor central
-        level.addGameObject(new PlayZone(670, 220, 85, 200));  // cuello derecho
+        level.addGameObject(new PlayZone(670, 225, 85, 195));  // cuello derecho
         
 
         // Zonas seguras verdes
         level.addGameObject(new InitialZone(130, 220, 125, 245));
-        level.addGameObject(new FinalZone(750, 220, 125, 245));
+        level.addGameObject(new FinalZone(755, 220, 120, 245));
 
         // Paredes invisibles para colisión externa
         
@@ -135,13 +221,13 @@ public class LevelLoader {
         //parte arriba
         level.addGameObject(new Wall(335, 415, 335, 5));
         level.addGameObject(new Wall(255, 265, 415, 5));
-        level.addGameObject(new Wall(665, 215, 5, 50));
+        level.addGameObject(new Wall(665, 220, 5, 45));
         
         // derecha
-        level.addGameObject(new Wall(665, 215, 210, 5));
-        level.addGameObject(new Wall(875, 215, 5, 250));
+        level.addGameObject(new Wall(665, 220, 210, 5));
+        level.addGameObject(new Wall(875, 220, 5, 245));
         level.addGameObject(new Wall(750, 465, 130, 5));
-        level.addGameObject(new Wall(750, 260, 5, 205));
+        level.addGameObject(new Wall(750, 270, 5, 200));
 
         // Moneda central
         level.addGameObject(new Coin(485, 335));
