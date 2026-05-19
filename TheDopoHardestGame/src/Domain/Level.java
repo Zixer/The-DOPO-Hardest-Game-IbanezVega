@@ -55,7 +55,6 @@ public class Level {
         for (Player player : players) {
         	player.update();
         	checkCollisions(player);
-        	resolveWallCollision(player);
         }
         
         checkPlayerCollisions();
@@ -69,30 +68,6 @@ public class Level {
 
                 if (isColliding(p1, p2)) {
                     p1.applyEffectTo(p2, this);
-                }
-            }
-        }
-    }
-    
-    /**
-     * Resuelve la colisión del jugador con objetos que bloquean el movimiento.
-     * 
-     * Si el jugador choca con una pared u otro objeto bloqueante,
-     * se revierte su movimiento para evitar que atraviese el objeto.
-     * 
-     * @param p Jugador al que se le revisa la colisión con paredes
-     */
-    private void resolveWallCollision(Player p) {
-
-        for (GameObject obj : gameObjects) {
-
-            if (obj.blocksMovement() && isColliding(p, obj)) {
-
-                p.setPosX(p.getPosX() - p.getVelocityX());
-
-                if (isColliding(p, obj)) {
-                   
-                    p.setPosY(p.getPosY() - p.getVelocityY());
                 }
             }
         }

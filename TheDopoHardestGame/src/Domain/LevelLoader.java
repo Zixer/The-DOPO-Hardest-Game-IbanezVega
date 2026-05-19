@@ -31,7 +31,7 @@ public class LevelLoader {
         Level level = new Level(60);
 
         // Jugador
-        Player player1 = new Player(200, 315, new Blinky());
+        Player player1 = new Player(90, 300, new Blinky());
         level.addPlayer(player1);
 
         if (mode.equals("PVSP")) {
